@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100c">
+  <title>Restricted Access — Passione Archives</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --ink: #e8eee8;
+      --muted: #8d9c90;
+      --paper: #07100c;
+      --panel: #0c1711;
+      --line: rgba(182, 220, 187, .13);
+      --green: #63db86;
+      --green-dim: #2a8e50;
+      --lime: #c4ef8c;
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "DM Sans", Arial, sans-serif;
+      --mono: "DM Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      margin: 0;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at 50% 12%, rgba(32, 113, 59, .18), transparent 34rem),
+        var(--paper);
+      color: var(--ink);
+      font: 14px/1.6 var(--sans);
+    }
+    body::before {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      background-image: linear-gradient(rgba(99,219,134,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(99,219,134,.018) 1px, transparent 1px);
+      background-size: 46px 46px;
+      content: "";
+      pointer-events: none;
+    }
+    button, input { font: inherit; }
+    input:focus-visible, button:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+    .login-card {
+      width: min(100%, 410px);
+      padding: clamp(25px, 7vw, 42px);
+      border: 1px solid var(--line);
+      background: rgba(12, 23, 17, .94);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, .28);
+    }
+    .brand-mark {
+      display: block;
+      width: 106px;
+      height: 106px;
+      margin: 0 auto 25px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 22px rgba(99, 219, 134, .13));
+    }
+    .eyebrow {
+      color: var(--green);
+      font: 9px var(--mono);
+      letter-spacing: .16em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 10px 0 8px;
+      font: 600 clamp(32px, 8vw, 43px)/1.1 var(--serif);
+      letter-spacing: -.035em;
+      text-align: center;
+    }
+    .intro { margin: 0 0 26px; color: var(--muted); font-size: 11px; text-align: center; }
+    .field { margin-top: 16px; }
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #b7c5b9;
+      font: 9px var(--mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    input {
+      width: 100%;
+      min-height: 46px;
+      padding: 11px 12px;
+      border: 1px solid rgba(182, 220, 187, .2);
+      border-radius: 0;
+      background: #08110c;
+      color: var(--ink);
+      font-size: 12px;
+    }
+    input::placeholder { color: #647468; }
+    .error {
+      margin: 13px 0 0;
+      color: #ff9a8b;
+      font-size: 11px;
+    }
+    .error[hidden] { display: none; }
+    .submit {
+      display: flex;
+      width: 100%;
+      min-height: 46px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 23px;
+      padding: 11px 14px;
+      border: 1px solid var(--green-dim);
+      background: rgba(99, 219, 134, .1);
+      color: var(--lime);
+      cursor: pointer;
+      font: 10px var(--mono);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .submit:hover { border-color: var(--green); background: rgba(99, 219, 134, .17); }
+    .clearance {
+      margin: 25px 0 0;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      color: #647468;
+      font: 8px/1.7 var(--mono);
+      letter-spacing: .07em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    @media (max-width: 420px) {
+      body { padding: 16px; }
+      .brand-mark { width: 90px; height: 90px; }
+    }
+  </style>
+  <script src="auth.js"></script>
+</head>
+<body>
+  <main class="login-card">
+    <img class="brand-mark" src="assets/passione-emblem.png" alt="Passione emblem">
+    <div class="eyebrow">Passione · Internal archive</div>
+    <h1>Restricted access.</h1>
+    <p class="intro">Enter your credentials to access the personnel registry.</p>
+    <form id="login-form">
+      <div class="field">
+        <label for="username">User ID</label>
+        <input id="username" name="username" type="text" autocomplete="username" placeholder="Enter your user ID" required autofocus>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+      </div>
+      <p class="error" id="login-error" role="alert" hidden>Access denied. Check your user ID and password.</p>
+      <button class="submit" type="submit"><span>Enter archive</span><span aria-hidden="true">→</span></button>
+    </form>
+    <p class="clearance">Venezia · personnel registry<br>Authorized access only</p>
+  </main>
+</body>
+</html>

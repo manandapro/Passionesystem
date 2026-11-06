@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100c">
+  <title>Contact Desk — Passione Archives</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --ink: #e8eee8;
+      --muted: #8d9c90;
+      --paper: #07100c;
+      --panel: #0c1711;
+      --line: rgba(182, 220, 187, .13);
+      --green: #63db86;
+      --green-dim: #2a8e50;
+      --lime: #c4ef8c;
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "DM Sans", Arial, sans-serif;
+      --mono: "DM Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: radial-gradient(ellipse at 86% 9%, rgba(32,113,59,.13), transparent 30rem), var(--paper);
+      color: var(--ink);
+      font: 14px/1.6 var(--sans);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, textarea { font: inherit; }
+    a:focus-visible, button:focus-visible, textarea:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+    .wrap { width: min(840px, calc(100% - 40px)); margin-inline: auto; }
+    .topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-mark { width: 42px; height: 42px; flex: 0 0 auto; object-fit: contain; }
+    .brand-copy { font: 500 10px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .brand-copy span { display: block; color: var(--muted); font-size: 8px; }
+    .header-actions { display: flex; align-items: center; gap: 12px; }
+    .back-link { color: var(--green); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .logout-link { padding: 8px 10px; border: 1px solid var(--green-dim); color: var(--lime); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .logout-link:hover { border-color: var(--green); background: rgba(99,219,134,.1); }
+    main { padding-block: 42px 65px; }
+    .eyebrow, .label { color: var(--green); font: 9px var(--mono); letter-spacing: .15em; text-transform: uppercase; }
+    h1 { margin: 10px 0 7px; font: 600 clamp(35px, 7vw, 52px)/1.08 var(--serif); letter-spacing: -.035em; }
+    .lead { margin: 0; color: #aebdb1; font-size: 12px; }
+    .simulation-notice {
+      margin: 22px 0 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(99,219,134,.25);
+      border-left: 2px solid var(--green);
+      background: rgba(99,219,134,.055);
+      color: #adbdaf;
+      font-size: 10px;
+    }
+    .simulation-notice strong { color: var(--lime); }
+    .chat-panel { overflow: hidden; border: 1px solid var(--line); background: rgba(12,23,17,.92); }
+    .chat-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 17px 19px; border-bottom: 1px solid var(--line); }
+    .operative-name { color: var(--ink); font: 600 18px var(--serif); }
+    .operative-status { display: block; margin-top: 2px; color: var(--muted); font: 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .availability { display: flex; align-items: center; gap: 7px; color: var(--green); font: 8px var(--mono); text-transform: uppercase; }
+    .availability::before { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 9px rgba(99,219,134,.5); content: ""; }
+    .messages { display: flex; min-height: 310px; max-height: 54vh; flex-direction: column; gap: 11px; overflow-y: auto; padding: 18px; }
+    .message { width: fit-content; max-width: min(88%, 580px); padding: 10px 12px; border: 1px solid var(--line); background: #0a130d; color: #c7d2c9; font-size: 11px; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .message--user { align-self: flex-end; border-color: rgba(99,219,134,.25); background: rgba(28,73,42,.35); }
+    .message--status { align-self: flex-start; color: var(--lime); }
+    .message-meta { display: block; margin-top: 5px; color: #718174; font: 8px var(--mono); }
+    .empty { margin: auto; color: #748477; font-size: 11px; text-align: center; }
+    .composer { padding: 14px; border-top: 1px solid var(--line); }
+    .composer label { display: block; margin-bottom: 7px; color: #b7c5b9; font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .composer-row { display: flex; align-items: stretch; gap: 9px; }
+    textarea { width: 100%; min-height: 78px; resize: vertical; padding: 10px 12px; border: 1px solid rgba(182,220,187,.2); border-radius: 0; background: #08110c; color: var(--ink); font-size: 11px; }
+    textarea::placeholder { color: #647468; }
+    .send {
+      flex: 0 0 auto;
+      align-self: stretch;
+      padding: 10px 14px;
+      border: 1px solid var(--green-dim);
+      background: rgba(99,219,134,.1);
+      color: var(--lime);
+      cursor: pointer;
+      font: 9px var(--mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .send:hover { border-color: var(--green); background: rgba(99,219,134,.17); }
+    .send:disabled { cursor: not-allowed; opacity: .5; }
+    .composer-note { margin: 7px 0 0; color: #718174; font-size: 9px; }
+    .footer { padding-block: 19px; border-top: 1px solid var(--line); color: #68786b; font: 8px/1.6 var(--mono); }
+    @media (max-width: 520px) {
+      .wrap { width: min(100% - 30px, 840px); }
+      .topbar { height: 64px; }
+      .brand-copy { font-size: 8px; }
+      .header-actions { gap: 8px; }
+      .back-link, .logout-link { font-size: 8px; }
+      .logout-link { padding: 7px 8px; }
+      .messages { min-height: 280px; max-height: 52vh; padding: 12px; }
+      .composer-row { flex-direction: column; }
+      .send { min-height: 42px; }
+    }
+  </style>
+  <script src="auth.js"></script>
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="index.html#top" aria-label="Passione archive home">
+      <img class="brand-mark" src="assets/passione-emblem.png" alt="">
+      <span class="brand-copy">Passione archives<span>Internal contract registry</span></span>
+    </a>
+    <nav class="header-actions" aria-label="Contact desk navigation">
+      <a class="back-link" href="index.html#contracts">← Operative files</a>
+      <a class="logout-link" href="login.html" data-sign-out>Logout</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <div class="eyebrow">Contract desk · contact channel</div>
+    <h1>Contact operative.</h1>
+    <p class="lead">A local message-room mockup for the selected personnel file.</p>
+    <div class="simulation-notice"><strong>LOCAL PROP SIMULATION:</strong> Messages stay in this browser session. No email is sent to the admin address, no approval is real, and no operative is contacted or dispatched.</div>
+
+    <section class="chat-panel" aria-label="Operative contact chat">
+      <header class="chat-heading">
+        <div>
+          <div class="operative-name" id="operative-name">Selected operative</div>
+          <span class="operative-status" id="operative-stand">Personnel contact</span>
+        </div>
+        <span class="availability">Contact desk</span>
+      </header>
+      <div class="messages" id="messages" role="log" aria-live="polite">
+        <p class="empty" id="empty-message">Messages for this operative will appear here.</p>
+      </div>
+      <form class="composer" id="message-form">
+        <label for="message-input">Message</label>
+        <div class="composer-row">
+          <textarea id="message-input" name="message" maxlength="1000" placeholder="Write a message for this local demo..." required></textarea>
+          <button class="send" type="submit">Send message →</button>
+        </div>
+        <p class="composer-note">This is a browser-only prop. The Send button does not email or transmit your message.</p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer wrap">PASSIONE · LOCAL PROP SIMULATION · NO EXTERNAL MESSAGES</footer>
+
+  <script>
+    const operatives = {
+      "risotto-nero": ["Risotto Nero", "Stand · Metallica"],
+      "formaggio": ["Formaggio", "Stand · Little Feet"],
+      "illuso": ["Illuso", "Stand · Man in the Mirror"],
+      "prosciutto": ["Prosciutto", "Stand · The Grateful Dead"],
+      "pesci": ["Pesci", "Stand · Beach Boy"],
+      "melone": ["Melone", "Stand · Baby Face"],
+      "ghiaccio": ["Ghiaccio", "Stand · White Album"],
+      "sorbet": ["Sorbet", "Stand · ｢Can't Tie Me Down｣"],
+      "gelato": ["Gelato", "Stand · ｢Baby Can't Cut｣"]
+    };
+    const requestedOperative = new URLSearchParams(location.search).get("operative");
+    const selected = operatives[requestedOperative];
+    if (!selected) {
+      throw new Error("The contact desk requires a valid operative from the personnel registry.");
+    }
+
+    document.querySelector("#operative-name").textContent = selected[0];
+    document.querySelector("#operative-stand").textContent = selected[1];
+    document.title = `Contact ${selected[0]} — Passione Archives`;
+
+    const storageKey = `passione-prop-chat:${requestedOperative}`;
+    const messagesElement = document.querySelector("#messages");
+    const emptyMessage = document.querySelector("#empty-message");
+    const form = document.querySelector("#message-form");
+    const input = document.querySelector("#message-input");
+    let messages = JSON.parse(sessionStorage.getItem(storageKey) || "[]");
+
+    function saveMessages() {
+      sessionStorage.setItem(storageKey, JSON.stringify(messages));
+    }
+
+    function appendMessage(type, text, createdAt = Date.now(), approvalAt = null) {
+      const message = { id: `${createdAt}-${Math.random().toString(36).slice(2)}`, type, text, createdAt, approvalAt };
+      messages.push(message);
+      saveMessages();
+      renderMessage(message);
+      return message;
+    }
+
+    function renderMessage(message) {
+      emptyMessage.hidden = true;
+      const element = document.createElement("div");
+      element.className = `message message--${message.type}`;
+      element.textContent = message.text;
+      const meta = document.createElement("span");
+      meta.className = "message-meta";
+      meta.textContent = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit" }).format(message.createdAt);
+      element.append(meta);
+      element.dataset.messageId = message.id;
+      messagesElement.append(element);
+      messagesElement.scrollTop = messagesElement.scrollHeight;
+    }
+
+    function approvePending(message) {
+      if (!message.approvalAt || message.approved) return;
+      const delay = message.approvalAt - Date.now();
+      if (delay > 0) {
+        window.setTimeout(() => approvePending(message), delay);
+        return;
+      }
+      message.approved = true;
+      saveMessages();
+      appendMessage("status", "[Status: Request approved. Notifying the operations team.]");
+    }
+
+    for (const message of [...messages]) {
+      renderMessage(message);
+      approvePending(message);
+    }
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+      const now = Date.now();
+      appendMessage("user", text, now);
+      const approvalAt = now + (Math.floor(Math.random() * 3) + 1) * 60_000;
+      const pending = appendMessage("status", "[Status: Request received. Awaiting approval.]",
+        Date.now(), approvalAt);
+      input.value = "";
+      approvePending(pending);
+    });
+  </script>
+</body>
+</html>

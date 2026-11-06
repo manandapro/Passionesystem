@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100c">
+  <meta name="description" content="Passione internal assignment assessment and La Squadra personnel records.">
+  <title>Assignment Assessment — Passione Archives</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --ink: #e8eee8;
+      --muted: #8d9c90;
+      --paper: #07100c;
+      --panel: #0c1711;
+      --line: rgba(182, 220, 187, .13);
+      --green: #63db86;
+      --green-dim: #2a8e50;
+      --lime: #c4ef8c;
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "DM Sans", Arial, sans-serif;
+      --mono: "DM Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      background: radial-gradient(ellipse at 86% 9%, rgba(32,113,59,.13), transparent 30rem), var(--paper);
+      color: var(--ink);
+      font: 15px/1.6 var(--sans);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
+    .wrap { width: min(1040px, calc(100% - 40px)); margin-inline: auto; }
+    .topbar { height: 72px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 11px; }
+    .brand-mark { width: 42px; height: 42px; flex: 0 0 auto; object-fit: contain; }
+    .brand-copy { font: 500 10px/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .brand-copy span { display: block; color: var(--muted); font-size: 8px; }
+    .header-actions { display: flex; align-items: center; gap: 14px; }
+    .back-link { color: var(--green); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .logout-link { padding: 8px 10px; border: 1px solid var(--green-dim); color: var(--lime); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .logout-link:hover { border-color: var(--green); background: rgba(99,219,134,.1); }
+    html[data-access="customer"] .portrait-image { filter: blur(7px); transform: scale(1.12); }
+    main { padding-block: 51px 70px; }
+    .eyebrow, .label { color: var(--green); font: 9px var(--mono); letter-spacing: .15em; text-transform: uppercase; }
+    h1 { margin: 12px 0 8px; font: 600 clamp(36px, 7vw, 57px)/1.08 var(--serif); letter-spacing: -.035em; }
+    .lead { max-width: 610px; margin: 0; color: #aebdb1; font-size: 13px; }
+    .registry-notice {
+      margin: 24px 0 19px;
+      padding: 14px 16px;
+      border: 1px solid rgba(99,219,134,.25);
+      border-left: 2px solid var(--green);
+      background: rgba(99,219,134,.055);
+      color: #adbdaf;
+      font-size: 11px;
+    }
+    .registry-notice strong { color: var(--lime); font-weight: 600; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr); gap: 18px; align-items: start; }
+    .workflow { display: grid; gap: 14px; min-width: 0; }
+    .panel { padding: clamp(19px, 3.5vw, 30px); border: 1px solid var(--line); background: rgba(12,23,17,.92); }
+    .panel h2 { margin: 0 0 20px; font: 600 25px/1.2 var(--serif); }
+    .field { margin-top: 17px; }
+    .field label { display: block; margin-bottom: 7px; color: #b7c5b9; font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .field select, .field input:not([type="checkbox"]):not([type="radio"]) {
+      width: 100%;
+      min-height: 43px;
+      padding: 10px 12px;
+      border: 1px solid rgba(182,220,187,.2);
+      border-radius: 0;
+      background: #08110c;
+      color: var(--ink);
+      font-size: 12px;
+    }
+    .field option { background: #0c1711; }
+    .field-hint { display: block; margin-top: 5px; color: #708174; font-size: 9px; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; }
+    .choice-list { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; }
+    .field .choice {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 0;
+      color: #b7c5b9;
+      font-size: 10px;
+      letter-spacing: normal;
+      text-transform: none;
+    }
+    .field .choice input[type="checkbox"], .terms-check input[type="checkbox"] {
+      flex: 0 0 14px;
+      width: 14px;
+      height: 14px;
+      margin: 2px 0 0;
+      padding: 0;
+      accent-color: var(--green);
+    }
+    .step-label { margin-bottom: 7px; color: var(--muted); font: 8px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .review-panel { border-color: rgba(99,219,134,.28); }
+    .review-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
+    .review-item { min-width: 0; padding: 10px; border: 1px solid var(--line); background: rgba(0,0,0,.15); }
+    .review-item dt { color: var(--muted); font: 8px var(--mono); letter-spacing: .07em; text-transform: uppercase; }
+    .review-item dd { margin: 4px 0 0; color: var(--ink); font-size: 10px; overflow-wrap: anywhere; }
+    .review-section { margin-top: 19px; }
+    .review-deliverables { display: grid; gap: 6px; margin: 9px 0 0; padding: 0; list-style: none; color: #b7c5b9; font-size: 10px; }
+    .review-deliverables li::before { margin-right: 8px; color: var(--green); content: "✓"; font: 9px var(--mono); }
+    .terms-check { display: flex; align-items: flex-start; gap: 9px; margin-top: 18px; padding: 12px; border: 1px solid var(--line); color: #b7c5b9; font-size: 10px; }
+    .review-actions { display: flex; gap: 9px; margin-top: 15px; }
+    .review-actions .submit { margin-top: 0; }
+    .review-actions .print-action { flex: 0 0 auto; }
+    .secondary {
+      display: inline-flex;
+      min-height: 46px;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: 9px var(--mono);
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .submit:disabled { cursor: not-allowed; opacity: .45; }
+    .completion-mark { display: grid; width: 36px; height: 36px; place-items: center; border: 1px solid var(--green-dim); border-radius: 50%; color: var(--green); font-size: 16px; }
+    .completion-reference { margin: 12px 0 0; color: var(--lime); font: 14px var(--mono); letter-spacing: .08em; }
+    .estimate-note { margin: 12px 0 0; color: #708174; font-size: 9px; }
+    .submit {
+      display: flex;
+      width: 100%;
+      min-height: 46px;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 23px;
+      padding: 11px 15px;
+      border: 1px solid var(--green-dim);
+      background: rgba(99,219,134,.1);
+      color: var(--lime);
+      cursor: pointer;
+      font: 10px var(--mono);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .submit:hover { border-color: var(--green); background: rgba(99,219,134,.17); }
+    .profile { display: flex; align-items: center; gap: 13px; margin-bottom: 18px; padding-bottom: 17px; border-bottom: 1px solid var(--line); }
+    .portrait {
+      --portrait-hue: 140;
+      position: relative;
+      flex: 0 0 56px;
+      width: 56px;
+      height: 70px;
+      overflow: hidden;
+      border: 1px solid hsla(var(--portrait-hue),62%,62%,.45);
+      background: radial-gradient(ellipse at 50% 35%, hsla(var(--portrait-hue),55%,38%,.62), transparent 55%), linear-gradient(145deg, hsla(var(--portrait-hue),34%,18%,.94), #08100b 78%);
+      isolation: isolate;
+    }
+    .portrait::before {
+      position: absolute;
+      z-index: -1;
+      top: 19%;
+      left: 34%;
+      width: 32%;
+      aspect-ratio: 1;
+      border: 1px solid hsla(var(--portrait-hue),70%,72%,.7);
+      border-radius: 48%;
+      background: linear-gradient(135deg, hsla(var(--portrait-hue),38%,66%,.75), hsla(var(--portrait-hue),30%,25%,.9));
+      content: "";
+    }
+    .portrait::after {
+      position: absolute;
+      z-index: -1;
+      bottom: -5%;
+      left: 14%;
+      width: 72%;
+      height: 59%;
+      border: 1px solid hsla(var(--portrait-hue),64%,65%,.52);
+      border-radius: 52% 52% 0 0;
+      background: linear-gradient(110deg, hsla(var(--portrait-hue),42%,41%,.72), #09110c 78%);
+      clip-path: polygon(29% 0, 71% 0, 100% 100%, 0 100%);
+      content: "";
+    }
+    .portrait-initials { position: absolute; right: 4px; bottom: 3px; color: var(--lime); font: 7px var(--mono); }
+    html[data-access="customer"] .portrait { display: none !important; }
+    html[data-access="customer"] .profile { gap: 0; }
+    .profile-name { font: 600 20px/1.2 var(--serif); }
+    .profile-stand { margin-top: 5px; color: var(--lime); font: 9px var(--mono); }
+    .profile-note { margin-top: 3px; color: var(--muted); font-size: 9px; }
+    .record-list { display: grid; gap: 7px; margin: 0 0 15px; }
+    .record-row { display: grid; grid-template-columns: 90px 1fr; gap: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--line); font-size: 9px; }
+    .record-row dt { color: var(--muted); }
+    .record-row dd { margin: 0; color: #c5d1c7; }
+    .estimate { margin-top: 17px; }
+    .estimate-total { margin: 4px 0 0; color: var(--lime); font: 600 clamp(27px, 5vw, 36px)/1.2 var(--serif); }
+    .line-item { display: flex; justify-content: space-between; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 10px; }
+    .line-item strong { color: var(--ink); font: 10px var(--mono); text-align: right; }
+    .evaluation { display: none; margin-top: 16px; padding: 13px; border: 1px solid var(--line); color: #aebdb1; font-size: 10px; }
+    .evaluation.visible { display: block; }
+    .evaluation strong { color: var(--green); font-weight: 500; }
+    .result-title { margin: 0 0 8px; color: var(--lime); font: 500 14px var(--serif); }
+    .record-note { margin: 17px 0 0; color: #66766a; font: 8px/1.55 var(--mono); }
+    #print-document { display: none; }
+    .footer { padding-block: 20px; border-top: 1px solid var(--line); color: #68786b; font: 8px/1.6 var(--mono); }
+    @media (min-width: 801px) { .layout > aside { position: sticky; top: 18px; } }
+    @media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+    @media (max-width: 440px) {
+      .wrap { width: min(100% - 30px, 1040px); }
+      .topbar { height: 64px; }
+      .brand-copy { font-size: 8px; }
+      .back-link { font-size: 8px; }
+      .header-actions { gap: 8px; }
+      .logout-link { padding: 7px 8px; font-size: 8px; }
+      main { padding-top: 37px; }
+      .field-grid, .review-list { grid-template-columns: 1fr; }
+      .review-actions { flex-direction: column-reverse; }
+    }
+    @media print {
+      @page { size: A4; margin: 15mm; }
+      html, body { min-height: 0; background: #fff !important; color: #111 !important; font: 10pt/1.4 Arial, sans-serif; }
+      body::before { display: none !important; }
+      body * { visibility: hidden !important; }
+      #print-document, #print-document * { visibility: visible !important; }
+      #print-document {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block !important;
+        width: 100%;
+        padding: 0;
+        color: #111;
+        background: #fff;
+      }
+      .print-header { display: flex; align-items: center; gap: 14px; padding-bottom: 12px; border-bottom: 2px solid #222; }
+      .print-header img { width: 58px; height: 58px; object-fit: contain; }
+      .print-header p, .print-header h1 { margin: 0; }
+      .print-header p { font: bold 9pt Arial, sans-serif; text-transform: uppercase; }
+      .print-header h1 { margin: 3px 0; font: bold 22pt Georgia, serif; }
+      .print-header span, .print-reference { font: 8pt Arial, sans-serif; }
+      .print-reference { margin: 12px 0; font-weight: bold; }
+      #print-document h2 { margin: 14px 0 7px; font: bold 11pt Arial, sans-serif; }
+      .print-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px 12px; margin: 0; }
+      .print-grid div { padding: 5px 7px; border: 1px solid #bbb; break-inside: avoid; }
+      .print-grid dt { color: #444; font: bold 7pt Arial, sans-serif; text-transform: uppercase; }
+      .print-grid dd { margin: 3px 0 0; font: 9pt Arial, sans-serif; overflow-wrap: anywhere; }
+      .print-deliverables { margin: 0; padding-left: 18px; font: 9pt Arial, sans-serif; }
+      .print-costs { width: 100%; border-collapse: collapse; font: 9pt Arial, sans-serif; }
+      .print-costs th, .print-costs td { padding: 5px 7px; border-bottom: 1px solid #bbb; text-align: left; }
+      .print-costs td { text-align: right; white-space: nowrap; }
+      .print-total th, .print-total td { border-top: 2px solid #222; font-weight: bold; }
+      .print-disclaimer { margin: 12px 0; padding: 8px; border: 1px solid #888; font: 8pt/1.4 Arial, sans-serif; }
+      .print-signatures { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 28px; break-inside: avoid; }
+      .print-signatures div { display: grid; gap: 5px; font: 8pt Arial, sans-serif; }
+      .print-signatures i { height: 32px; border-bottom: 1px solid #222; }
+      .print-signatures small { color: #444; font: 7pt Arial, sans-serif; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+  <script src="auth.js"></script>
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="index.html#top" aria-label="Passione archive home">
+      <img class="brand-mark" src="assets/passione-emblem.png" alt="">
+      <span class="brand-copy">Passione archives<span>Internal contract registry</span></span>
+    </a>
+    <div class="header-actions">
+      <a class="back-link" href="index.html#contracts">← Operative files</a>
+      <a class="logout-link" href="login.html" data-sign-out>Logout</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="eyebrow">Contract desk · assignment assessment</div>
+    <h1>Prepare an assessment.</h1>
+    <p class="lead">Select an operative and assignment parameters to review the estimated retainer, mission rate, and personnel fit.</p>
+    <div class="registry-notice"><strong>Registry notice:</strong> Assessment is based on the selected assignment scope and available personnel file.</div>
+
+    <div class="layout">
+      <div class="workflow">
+        <form class="panel" id="brief-form">
+          <div class="step-label">Step 01 · Assignment parameters</div>
+          <h2>Assignment details</h2>
+          <div class="field">
+            <label for="operative">Selected operative</label>
+            <select id="operative" name="operative"></select>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="department">Requesting division</label>
+              <select id="department" name="department">
+                <option>Venezia Operations</option>
+                <option>Internal Logistics</option>
+                <option>Personnel Office</option>
+                <option>Stand Research Unit</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="scenario">Assignment type</label>
+              <select id="scenario" name="scenario">
+                <option value="practice" data-factor="0.65">Stand capability assessment</option>
+                <option value="archive" data-factor="0.8">Archive and document retrieval</option>
+                <option value="escort" data-factor="0.9">Non-confrontational escort detail</option>
+                <option value="teamwork" data-factor="0.7">Team coordination exercise</option>
+                <option value="venue" data-factor="0.85">Venue and event coordination</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="setting">Assignment location</label>
+            <select id="setting" name="setting">
+              <option>Venice archive hall</option>
+              <option>Naples conservatory</option>
+              <option>Florence gallery courtyard</option>
+              <option>Quiet train-station café</option>
+            </select>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="assignment-date">Requested date</label>
+              <input id="assignment-date" name="assignment-date" type="date" required>
+            </div>
+            <div class="field">
+              <label for="time-slot">Preferred time</label>
+              <select id="time-slot" name="time-slot">
+                <option>Morning · 08:00–12:00</option>
+                <option>Afternoon · 12:00–17:00</option>
+                <option>Evening · 17:00–21:00</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="scope">Estimated duration</label>
+              <select id="scope" name="scope">
+                <option value="0.65">Short · up to one hour</option>
+                <option value="1" selected>Standard · up to four hours</option>
+                <option value="1.8">Extended · full day</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="complexity">Operational complexity</label>
+              <select id="complexity" name="complexity">
+                <option value="0">Routine · known conditions</option>
+                <option value="0.15" selected>Elevated · multiple variables</option>
+                <option value="0.3">Complex · unfamiliar conditions</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label for="priority">Scheduling priority</label>
+              <select id="priority" name="priority">
+                <option value="0">Standard scheduling</option>
+                <option value="0.15">Priority scheduling · subject to availability</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="support">Administrative support</label>
+              <select id="support" name="support">
+                <option value="0">Operative only · L. 0</option>
+                <option value="5000">Logistics coordinator · L. 5,000</option>
+                <option value="8000">Venue setup assistance · L. 8,000</option>
+                <option value="7000">Transport coordination · L. 7,000</option>
+              </select>
+            </div>
+          </div>
+          <fieldset class="field choice-list">
+            <legend class="field label">Requested close-out documents</legend>
+            <label class="choice"><input type="checkbox" name="deliverables" value="Completion summary" checked> Completion summary</label>
+            <label class="choice"><input type="checkbox" name="deliverables" value="Handover checklist" checked> Handover checklist</label>
+            <label class="choice"><input type="checkbox" name="deliverables" value="Stand capability notes"> Stand capability notes</label>
+          </fieldset>
+          <p class="field-hint">Assignment options are limited to administrative, coordination, retrieval, training, and escort services.</p>
+          <button class="submit" type="submit"><span>Review assignment and estimate</span><span aria-hidden="true">→</span></button>
+        </form>
+
+        <section class="panel review-panel" id="review-panel" aria-labelledby="review-heading" hidden>
+          <div class="step-label">Step 02 · Verify before confirmation</div>
+          <h2 id="review-heading">Review assignment</h2>
+          <dl class="review-list">
+            <div class="review-item"><dt>Assigned operative</dt><dd id="review-operative"></dd></div>
+            <div class="review-item"><dt>Requesting division</dt><dd id="review-department"></dd></div>
+            <div class="review-item"><dt>Assignment type</dt><dd id="review-scenario"></dd></div>
+            <div class="review-item"><dt>Location</dt><dd id="review-location"></dd></div>
+            <div class="review-item"><dt>Date and time</dt><dd id="review-schedule"></dd></div>
+            <div class="review-item"><dt>Duration and complexity</dt><dd id="review-scope"></dd></div>
+            <div class="review-item"><dt>Scheduling priority</dt><dd id="review-priority"></dd></div>
+            <div class="review-item"><dt>Administrative support</dt><dd id="review-support"></dd></div>
+          </dl>
+          <div class="review-section">
+            <div class="label">Close-out documents</div>
+            <ul class="review-deliverables" id="review-deliverables"></ul>
+          </div>
+          <div class="review-section">
+            <div class="label">Estimated cost breakdown</div>
+            <div class="line-item"><span>Engagement retainer</span><strong id="review-retainer"></strong></div>
+            <div class="line-item"><span>Assignment service rate</span><strong id="review-base"></strong></div>
+            <div class="line-item"><span>Complexity adjustment</span><strong id="review-complexity"></strong></div>
+            <div class="line-item"><span>Priority scheduling</span><strong id="review-priority-fee"></strong></div>
+            <div class="line-item"><span>Administrative support</span><strong id="review-support-fee"></strong></div>
+            <div class="line-item"><strong>Estimated total</strong><strong id="review-total"></strong></div>
+          </div>
+          <label class="terms-check"><input id="confirm-terms" type="checkbox"> I confirm that this assignment is within the listed service scope and that the request details are accurate.</label>
+          <div class="review-actions">
+            <button class="secondary" id="edit-request" type="button">Change details</button>
+            <button class="secondary print-action" id="print-request" type="button">Print copy</button>
+            <button class="submit" id="confirm-request" type="button" disabled><span>Confirm request</span><span aria-hidden="true">✓</span></button>
+          </div>
+        </section>
+
+        <section class="panel review-panel" id="completion-panel" aria-labelledby="completion-heading" hidden>
+          <div class="step-label">Step 03 · Request record</div>
+          <div class="completion-mark" aria-hidden="true">✓</div>
+          <h2 id="completion-heading" style="margin-top:15px">Assessment recorded</h2>
+          <p id="completion-copy" class="lead"></p>
+          <p class="completion-reference" id="completion-reference"></p>
+          <p class="record-note">This reference is generated in the current browser session. No request or personal information is sent to a server.</p>
+          <a class="secondary" id="contact-operative" href="chat.html" style="margin-top:18px">Open contact desk</a>
+          <button class="secondary" id="new-request" type="button" style="margin-top:18px">Prepare another assessment</button>
+        </section>
+      </div>
+
+      <aside class="panel" aria-live="polite">
+        <div class="label">Selected character</div>
+        <div class="profile" style="margin-top:13px">
+          <div class="portrait" id="portrait" role="img" aria-label="Portrait">
+            <span class="portrait-initials" id="portrait-initials">RN</span>
+          </div>
+          <div>
+            <div class="profile-name" id="profile-name">Risotto Nero</div>
+            <div class="profile-stand" id="profile-stand">Stand · Metallica</div>
+            <div class="profile-note" id="profile-role">La Squadra Esecuzioni</div>
+          </div>
+        </div>
+        <dl class="record-list">
+          <div class="record-row"><dt>Affiliation</dt><dd id="profile-affiliation"></dd></div>
+          <div class="record-row"><dt>Status</dt><dd id="profile-status"></dd></div>
+          <div class="record-row"><dt>Profile</dt><dd id="profile-description"></dd></div>
+          <div class="record-row"><dt>Stand ability</dt><dd id="profile-ability"></dd></div>
+        </dl>
+        <div class="label">Estimated contract · Italian lire</div>
+        <div class="estimate-total" id="estimate-total">L. 60,000</div>
+        <div class="line-item"><span>Engagement retainer</span><strong id="retainer-line">L. 18,000</strong></div>
+        <div class="line-item"><span>Assignment service rate</span><strong id="scenario-line">L. 42,000</strong></div>
+        <div class="line-item"><span>Complexity adjustment</span><strong id="complexity-line">L. 0</strong></div>
+        <div class="line-item"><span>Priority scheduling</span><strong id="priority-line">L. 0</strong></div>
+        <div class="line-item"><span>Administrative support</span><strong id="support-line">L. 0</strong></div>
+        <p class="estimate-note">Rates are calculated from the selected assignment category, duration, complexity, priority, and support package.</p>
+        <p class="record-note">Details remain in this browser session. Availability and final terms are subject to internal review.</p>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer wrap">PASSIONE · VENEZIA PERSONNEL REGISTRY · INTERNAL CIRCULATION ONLY</footer>
+
+  <article id="print-document" aria-label="Printable assignment assessment">
+    <header class="print-header">
+      <img src="assets/passione-emblem.png" alt="Passione emblem">
+      <div>
+        <p>Passione · Internal archive</p>
+        <h1>Assignment Assessment</h1>
+        <span>PROP COPY · NONVIOLENT SERVICES ONLY · NOT A VALID INVOICE OR CONTRACT</span>
+      </div>
+    </header>
+    <p class="print-reference" id="print-reference"></p>
+    <h2>Assignment details</h2>
+    <dl class="print-grid">
+      <div><dt>Assigned operative</dt><dd id="print-operative"></dd></div>
+      <div><dt>Requesting division</dt><dd id="print-department"></dd></div>
+      <div><dt>Service type</dt><dd id="print-scenario"></dd></div>
+      <div><dt>Location</dt><dd id="print-location"></dd></div>
+      <div><dt>Date and time</dt><dd id="print-schedule"></dd></div>
+      <div><dt>Duration and complexity</dt><dd id="print-scope"></dd></div>
+      <div><dt>Scheduling priority</dt><dd id="print-priority"></dd></div>
+      <div><dt>Administrative support</dt><dd id="print-support"></dd></div>
+    </dl>
+    <h2>Requested close-out documents</h2>
+    <ul class="print-deliverables" id="print-deliverables"></ul>
+    <h2>Estimated cost breakdown · Italian lire</h2>
+    <table class="print-costs">
+      <tbody>
+        <tr><th>Engagement retainer</th><td id="print-retainer"></td></tr>
+        <tr><th>Assignment service rate</th><td id="print-base"></td></tr>
+        <tr><th>Complexity adjustment</th><td id="print-complexity"></td></tr>
+        <tr><th>Priority scheduling</th><td id="print-priority-fee"></td></tr>
+        <tr><th>Administrative support</th><td id="print-support-fee"></td></tr>
+        <tr class="print-total"><th>Estimated total</th><td id="print-total"></td></tr>
+      </tbody>
+    </table>
+    <p class="print-disclaimer">This is a fictional prop document generated in the browser. The estimate is not a request for payment, and this document does not authorize or confirm real services. Listed service categories are limited to administrative, coordination, retrieval, training, and non-confrontational escort work.</p>
+    <div class="print-signatures">
+      <div><span>Requesting representative · prop acknowledgement</span><i></i><small>Signature / date</small></div>
+      <div><span>Assessment reviewer · prop acknowledgement</span><i></i><small>Signature / date</small></div>
+    </div>
+  </article>
+
+  <script>
+    const characters = [
+      {
+        slug: "risotto-nero", name: "Risotto Nero", stand: "Metallica", initials: "RN", hue: 140, retainer: 18000, rate: 42000, affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Team leader",
+        ability: "Metallica manipulates iron particles and iron within a target's body. Its range and effectiveness depend on available iron and proximity.",
+        // IMAGE URL — Risotto Nero: replace this local path to use a different portrait.
+        imageUrl: "assets/risotto-nero.jpg", fit: ["archive", "escort", "teamwork"]
+      },
+      {
+        slug: "formaggio", name: "Formaggio", stand: "Little Feet", initials: "FO", hue: 32, retainer: 8000, rate: 19000, affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Reconnaissance specialist",
+        ability: "Little Feet gradually reduces the size of its target. The effect increases over time after contact.",
+        // IMAGE URL — Formaggio: replace this local path to use a different portrait.
+        imageUrl: "assets/formaggio.png", fit: ["archive", "practice", "custom"]
+      },
+      {
+        slug: "illuso", name: "Illuso", stand: "Man in the Mirror", initials: "IL", hue: 190, retainer: 13000, rate: 31000, affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Infiltration specialist",
+        ability: "Man in the Mirror draws selected people and objects into a mirror dimension, with access governed by its user.",
+        // IMAGE URL — Illuso: replace this local path to use a different portrait.
+        imageUrl: "assets/illuso.png", fit: ["archive", "practice", "custom"]
+      },
+      {
+        slug: "prosciutto", name: "Prosciutto", stand: "The Grateful Dead", initials: "PR", hue: 48, retainer: 16000, rate: 38000, affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Field operative · senior member",
+        ability: "The Grateful Dead accelerates aging over a wide area. Its effects are influenced by body temperature.",
+        // IMAGE URL — Prosciutto: replace this local path to use a different portrait.
+        imageUrl: "assets/prosciutto.png", fit: ["escort", "teamwork", "practice"]
+      },
+      {
+        slug: "pesci", name: "Pesci", stand: "Beach Boy", initials: "PE", hue: 170, retainer: 7000, rate: 17000, affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Capture and pursuit",
+        ability: "Beach Boy uses a nearly invisible fishing line and hook that can pass through obstacles and track a target.",
+        // IMAGE URL — Pesci: replace this local path to use a different portrait.
+        imageUrl: "assets/pesci.png", fit: ["archive", "escort", "practice"]
+      },
+      {
+        slug: "melone", name: "Melone", stand: "Baby Face", initials: "ME", hue: 285, retainer: 14000, rate: 34000, affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Remote-Stand specialist",
+        ability: "Baby Face is a remotely operating Stand that can develop independently and pursue targets at a distance.",
+        // IMAGE URL — Melone: replace this local path to use a different portrait.
+        imageUrl: "assets/melone.jpg", fit: ["archive", "practice", "custom"]
+      },
+      {
+        slug: "ghiaccio", name: "Ghiaccio", stand: "White Album", initials: "GH", hue: 205, retainer: 15000, rate: 36000, affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Combat · defensive specialist",
+        ability: "White Album creates and controls ice and forms a protective suit around its user.",
+        // IMAGE URL — Ghiaccio: replace this local path to use a different portrait.
+        imageUrl: "assets/ghiaccio.jpg", fit: ["practice", "teamwork", "escort"]
+      },
+      {
+        slug: "sorbet", name: "Sorbet", stand: "｢Can't Tie Me Down｣", initials: "SO", hue: 90, retainer: 12000, rate: 28000, affiliation: "La Squadra Esecuzioni", status: "Active · available", profile: "Escape and restraint specialist",
+        ability: "Can't Tie Me Down prevents Sorbet's body from being tied, bound, or restrained by ropes, restraints, or other means. He can slip free of bindings.",
+        // IMAGE URL — Sorbet: replace this local path to use a different portrait.
+        imageUrl: "assets/sorbet.png", fit: ["archive", "escort", "practice"]
+      },
+      {
+        slug: "gelato", name: "Gelato", stand: "｢Baby Can't Cut｣", initials: "GE", hue: 320, retainer: 13000, rate: 30000, affiliation: "La Squadra Esecuzioni", status: "Active · available", profile: "Defensive and close-protection specialist",
+        ability: "Baby Can't Cut makes Gelato's body impervious to sharp or pointed objects. He cannot be cut, sliced, or pierced through the skin.",
+        // IMAGE URL — Gelato: replace this local path to use a different portrait.
+        imageUrl: "assets/gelato.png", fit: ["teamwork", "escort", "practice"]
+      }
+    ];
+
+    const money = new Intl.NumberFormat("en-GB", { maximumFractionDigits: 0 });
+    const operativeSelect = document.querySelector("#operative");
+    const form = document.querySelector("#brief-form");
+    const scenarioSelect = document.querySelector("#scenario");
+    const settingSelect = document.querySelector("#setting");
+    const scopeSelect = document.querySelector("#scope");
+    const complexitySelect = document.querySelector("#complexity");
+    const prioritySelect = document.querySelector("#priority");
+    const supportSelect = document.querySelector("#support");
+    const assignmentDate = document.querySelector("#assignment-date");
+    const reviewPanel = document.querySelector("#review-panel");
+    const completionPanel = document.querySelector("#completion-panel");
+    const confirmTerms = document.querySelector("#confirm-terms");
+    const confirmButton = document.querySelector("#confirm-request");
+    let activeCharacter;
+    let assessmentReference = "";
+
+    function lire(amount) {
+      return `L. ${money.format(Math.ceil(amount / 1000) * 1000)}`;
+    }
+
+    function selectedScenario() {
+      return scenarioSelect.options[scenarioSelect.selectedIndex];
+    }
+
+    function selectedText(select) {
+      return select.options[select.selectedIndex].text;
+    }
+
+    function roundedCharge(amount) {
+      return amount > 0 ? Math.ceil(amount / 1000) * 1000 : 0;
+    }
+
+    function updateEstimate() {
+      const scenario = selectedScenario();
+      const durationFactor = Number(scopeSelect.value);
+      const scenarioFactor = Number(scenario.dataset.factor);
+      const baseRate = roundedCharge(activeCharacter.rate * durationFactor * scenarioFactor);
+      const complexityFee = roundedCharge(baseRate * Number(complexitySelect.value));
+      const priorityFee = roundedCharge((baseRate + complexityFee) * Number(prioritySelect.value));
+      const supportFee = Number(supportSelect.value);
+      const total = activeCharacter.retainer + baseRate + complexityFee + priorityFee + supportFee;
+
+      document.querySelector("#estimate-total").textContent = lire(total);
+      document.querySelector("#retainer-line").textContent = lire(activeCharacter.retainer);
+      document.querySelector("#scenario-line").textContent = lire(baseRate);
+      document.querySelector("#complexity-line").textContent = lire(complexityFee);
+      document.querySelector("#priority-line").textContent = lire(priorityFee);
+      document.querySelector("#support-line").textContent = lire(supportFee);
+      return { baseRate, complexityFee, priorityFee, supportFee, total };
+    }
+
+    function updateCharacter() {
+      activeCharacter = characters.find(character => character.slug === operativeSelect.value);
+      if (!activeCharacter) {
+        throw new Error("The selected operative is not in the personnel registry.");
+      }
+      document.querySelector("#profile-name").textContent = activeCharacter.name;
+      document.querySelector("#profile-stand").textContent = `Stand · ${activeCharacter.stand}`;
+      document.querySelector("#profile-affiliation").textContent = activeCharacter.affiliation;
+      document.querySelector("#profile-status").textContent = activeCharacter.status;
+      document.querySelector("#profile-description").textContent = activeCharacter.profile;
+      document.querySelector("#profile-ability").textContent = activeCharacter.ability;
+      document.querySelector("#portrait-initials").textContent = activeCharacter.initials;
+      const portrait = document.querySelector("#portrait");
+      portrait.style.setProperty("--portrait-hue", activeCharacter.hue);
+      portrait.setAttribute("aria-label", `Portrait of ${activeCharacter.name}`);
+      portrait.querySelector(".portrait-image")?.remove();
+      if (activeCharacter.imageUrl) {
+        const portraitImage = document.createElement("img");
+        portraitImage.className = "portrait-image";
+        portraitImage.src = activeCharacter.imageUrl;
+        portraitImage.alt = `Portrait of ${activeCharacter.name}`;
+        portrait.prepend(portraitImage);
+      }
+      updateEstimate();
+    }
+
+    function populateReview(costs) {
+      assessmentReference = `PROP-${Date.now().toString(36).toUpperCase()}`;
+      const scenario = selectedScenario();
+      const selectedDate = new Date(`${assignmentDate.value}T00:00:00`);
+      const dateLabel = new Intl.DateTimeFormat("en-GB", { dateStyle: "long" }).format(selectedDate);
+      const deliverables = [...form.querySelectorAll('input[name="deliverables"]:checked')].map(input => input.value);
+      const values = {
+        "review-operative": activeCharacter.name,
+        "review-department": selectedText(document.querySelector("#department")),
+        "review-scenario": scenario.text,
+        "review-location": selectedText(settingSelect),
+        "review-schedule": `${dateLabel} · ${selectedText(document.querySelector("#time-slot"))}`,
+        "review-scope": `${selectedText(scopeSelect)} · ${selectedText(complexitySelect)}`,
+        "review-priority": selectedText(prioritySelect),
+        "review-support": selectedText(supportSelect),
+        "review-retainer": lire(activeCharacter.retainer),
+        "review-base": lire(costs.baseRate),
+        "review-complexity": lire(costs.complexityFee),
+        "review-priority-fee": lire(costs.priorityFee),
+        "review-support-fee": lire(costs.supportFee),
+        "review-total": lire(costs.total)
+      };
+
+      for (const [id, value] of Object.entries(values)) {
+        document.querySelector(`#${id}`).textContent = value;
+      }
+
+      const deliverableList = document.querySelector("#review-deliverables");
+      deliverableList.replaceChildren();
+      if (deliverables.length === 0) {
+        const item = document.createElement("li");
+        item.textContent = "No close-out documents requested";
+        deliverableList.append(item);
+      } else {
+        for (const deliverable of deliverables) {
+          const item = document.createElement("li");
+          item.textContent = deliverable;
+          deliverableList.append(item);
+        }
+      }
+
+      const printValues = {
+        "print-reference": `ASSESSMENT REFERENCE · ${assessmentReference}`,
+        "print-operative": activeCharacter.name,
+        "print-department": selectedText(document.querySelector("#department")),
+        "print-scenario": scenario.text,
+        "print-location": selectedText(settingSelect),
+        "print-schedule": values["review-schedule"],
+        "print-scope": values["review-scope"],
+        "print-priority": values["review-priority"],
+        "print-support": values["review-support"],
+        "print-retainer": values["review-retainer"],
+        "print-base": values["review-base"],
+        "print-complexity": values["review-complexity"],
+        "print-priority-fee": values["review-priority-fee"],
+        "print-support-fee": values["review-support-fee"],
+        "print-total": values["review-total"]
+      };
+      for (const [id, value] of Object.entries(printValues)) {
+        document.querySelector(`#${id}`).textContent = value;
+      }
+
+      const printDeliverables = document.querySelector("#print-deliverables");
+      printDeliverables.replaceChildren();
+      const printItems = deliverables.length ? deliverables : ["No close-out documents requested"];
+      for (const deliverable of printItems) {
+        const item = document.createElement("li");
+        item.textContent = deliverable;
+        printDeliverables.append(item);
+      }
+    }
+
+    for (const character of characters) {
+      const option = document.createElement("option");
+      option.value = character.slug;
+      option.textContent = character.name;
+      operativeSelect.append(option);
+    }
+
+    const requestedOperative = new URLSearchParams(window.location.search).get("operative");
+    if (characters.some(character => character.slug === requestedOperative)) {
+      operativeSelect.value = requestedOperative;
+    }
+    const today = new Date();
+    assignmentDate.min = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    assignmentDate.value = assignmentDate.min;
+    updateCharacter();
+
+    form.addEventListener("change", () => {
+      updateCharacter();
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+      const costs = updateEstimate();
+      populateReview(costs);
+      confirmTerms.checked = false;
+      confirmButton.disabled = true;
+      form.hidden = true;
+      reviewPanel.hidden = false;
+      reviewPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    confirmTerms.addEventListener("change", () => {
+      confirmButton.disabled = !confirmTerms.checked;
+    });
+
+    document.querySelector("#edit-request").addEventListener("click", () => {
+      reviewPanel.hidden = true;
+      form.hidden = false;
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.querySelector("#print-request").addEventListener("click", () => {
+      window.print();
+    });
+
+    confirmButton.addEventListener("click", () => {
+      if (!confirmTerms.checked) return;
+      const reference = `PS-${Date.now().toString(36).toUpperCase()}`;
+      document.querySelector("#completion-copy").textContent = `${activeCharacter.name}'s assignment assessment has been recorded in this browser session for internal review.`;
+      document.querySelector("#completion-reference").textContent = `REFERENCE · ${reference}`;
+      document.querySelector("#contact-operative").href = `chat.html?operative=${encodeURIComponent(activeCharacter.slug)}`;
+      reviewPanel.hidden = true;
+      completionPanel.hidden = false;
+      completionPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.querySelector("#new-request").addEventListener("click", () => {
+      completionPanel.hidden = true;
+      form.hidden = false;
+      confirmTerms.checked = false;
+      confirmButton.disabled = true;
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  </script>
+</body>
+</html>

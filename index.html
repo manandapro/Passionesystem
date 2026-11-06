@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07100c">
+  <meta name="description" content="Passione internal personnel and contract archive: La Squadra Esecuzioni.">
+  <title>Passione Archives — La Squadra</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+
+    :root {
+      color-scheme: dark;
+      --ink: #e8eee8;
+      --muted: #8d9c90;
+      --paper: #07100c;
+      --panel: #0c1711;
+      --panel-light: #101e15;
+      --line: rgba(182, 220, 187, .13);
+      --green: #63db86;
+      --green-dim: #2a8e50;
+      --lime: #c4ef8c;
+      --serif: "Playfair Display", Georgia, serif;
+      --sans: "DM Sans", Arial, sans-serif;
+      --mono: "DM Mono", monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 86% 9%, rgba(32, 113, 59, .13), transparent 30rem),
+        var(--paper);
+      color: var(--ink);
+      font: 15px/1.6 var(--sans);
+    }
+    body::before {
+      position: fixed;
+      z-index: -1;
+      inset: 0;
+      background-image: linear-gradient(rgba(99,219,134,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(99,219,134,.018) 1px, transparent 1px);
+      background-size: 46px 46px;
+      content: "";
+      pointer-events: none;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button:focus-visible, a:focus-visible, input:focus-visible {
+      outline: 2px solid var(--lime);
+      outline-offset: 3px;
+    }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+    .mono { font-family: var(--mono); }
+
+    .topbar {
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { width: 42px; height: 42px; flex: 0 0 auto; object-fit: contain; }
+    .brand-copy { font: 500 10px/1.45 var(--mono); letter-spacing: .14em; text-transform: uppercase; }
+    .brand-copy span { display: block; color: var(--muted); font-size: 9px; }
+    .nav { display: flex; align-items: center; gap: 28px; }
+    .nav a, .edition {
+      color: var(--muted);
+      font: 10px var(--mono);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+    .nav a:hover { color: var(--green); }
+    .edition { display: flex; align-items: center; gap: 14px; color: var(--green); }
+    .logout-link {
+      padding: 8px 10px;
+      border: 1px solid var(--green-dim);
+      color: var(--lime) !important;
+      font: 9px var(--mono) !important;
+      letter-spacing: .08em !important;
+      text-transform: uppercase;
+    }
+    .logout-link:hover { border-color: var(--green); background: rgba(99,219,134,.1); }
+
+    .hero {
+      position: relative;
+      display: grid;
+      min-height: 438px;
+      align-items: center;
+      overflow: hidden;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero::after {
+      position: absolute;
+      top: -220px;
+      right: -80px;
+      width: min(66vw, 760px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(99,219,134,.17);
+      border-radius: 50%;
+      box-shadow: 0 0 0 55px rgba(99,219,134,.025), 0 0 0 110px rgba(99,219,134,.018);
+      content: "";
+      pointer-events: none;
+    }
+    .hero::before {
+      position: absolute;
+      top: 50%;
+      right: 12%;
+      width: 220px;
+      height: 320px;
+      border: 1px solid rgba(99,219,134,.2);
+      border-radius: 47% 47% 8% 8%;
+      background: linear-gradient(155deg, rgba(99,219,134,.12), transparent 70%);
+      content: "";
+      transform: translateY(-42%) rotate(18deg);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 720px; padding: 75px 0 82px; }
+    .eyebrow, .section-label {
+      color: var(--green);
+      font: 10px var(--mono);
+      letter-spacing: .17em;
+      text-transform: uppercase;
+    }
+    .eyebrow { display: flex; align-items: center; gap: 10px; }
+    .eyebrow::before { width: 27px; height: 1px; background: var(--green); content: ""; }
+    h1 {
+      margin: 19px 0 15px;
+      font: 800 clamp(56px, 9.5vw, 108px)/.95 var(--serif);
+      letter-spacing: -.055em;
+    }
+    h1 span { color: var(--green); font-style: italic; }
+    .hero-copy { max-width: 480px; color: #b6c4b8; font-size: 15px; }
+    .hero-meta { display: flex; align-items: center; gap: 20px; margin-top: 30px; }
+    .hero-meta span { color: var(--muted); font: 9px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+    .hero-meta strong { color: var(--ink); font-weight: 500; }
+    .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--green); }
+    .clearance { position: absolute; right: 0; bottom: 30px; color: #536959; font: 9px var(--mono); letter-spacing: .1em; }
+
+    .overview {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 75px;
+      padding-block: 70px 76px;
+      border-bottom: 1px solid var(--line);
+    }
+    h2 { margin: 12px 0 0; font: 600 clamp(34px, 4vw, 47px)/1.07 var(--serif); letter-spacing: -.035em; }
+    .overview-copy { color: #afbeb2; font-size: 14px; }
+    .overview-copy p { margin: 0 0 13px; }
+    .note {
+      margin-top: 21px;
+      padding: 13px 16px;
+      border-left: 2px solid var(--green-dim);
+      background: rgba(99,219,134,.045);
+      color: var(--muted);
+      font-size: 11px;
+    }
+    .note strong { color: var(--lime); font-weight: 500; }
+
+    .contracts { padding-block: 72px 82px; }
+    .contract-head { display: flex; align-items: end; justify-content: space-between; gap: 26px; margin-bottom: 25px; }
+    .contract-head h2 { margin-bottom: 0; }
+    .subcopy { margin: 9px 0 0; color: var(--muted); font-size: 12px; }
+    .search {
+      width: min(280px, 100%);
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      background: rgba(0,0,0,.2);
+      color: var(--ink);
+      font-size: 12px;
+    }
+    .search::placeholder { color: #647468; }
+    .filters { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 21px; }
+    .filter {
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: 9px var(--mono);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      transition: .18s ease;
+    }
+    .filter:hover, .filter[aria-pressed="true"] { border-color: var(--green-dim); color: var(--green); }
+    .filter[aria-pressed="true"] { background: rgba(99,219,134,.08); }
+    .board-count { min-height: 18px; margin: -10px 0 12px; color: #708174; font: 9px var(--mono); }
+    .board {
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+    .roster {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-content: start;
+      gap: 8px;
+    }
+    .operative {
+      min-height: 82px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: rgba(12,23,17,.88);
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .18s ease, background .18s ease;
+    }
+    .operative:hover, .operative[aria-pressed="true"] {
+      border-color: rgba(99,219,134,.62);
+      background: linear-gradient(115deg, rgba(30,92,49,.35), rgba(12,23,17,.95));
+    }
+    .operative[hidden] { display: none; }
+    .portrait {
+      --portrait-hue: 125;
+      position: relative;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      border: 1px solid hsla(var(--portrait-hue), 62%, 62%, .45);
+      background:
+        radial-gradient(ellipse at 50% 35%, hsla(var(--portrait-hue), 55%, 38%, .62), transparent 55%),
+        linear-gradient(145deg, hsla(var(--portrait-hue), 34%, 18%, .94), #08100b 78%);
+      isolation: isolate;
+    }
+    .portrait::before {
+      position: absolute;
+      z-index: -1;
+      top: 19%;
+      left: 34%;
+      width: 32%;
+      aspect-ratio: 1;
+      border: 1px solid hsla(var(--portrait-hue), 70%, 72%, .7);
+      border-radius: 48% 48% 42% 42%;
+      background: linear-gradient(135deg, hsla(var(--portrait-hue), 38%, 66%, .75), hsla(var(--portrait-hue), 30%, 25%, .9));
+      box-shadow: 0 0 22px hsla(var(--portrait-hue), 80%, 48%, .25);
+      content: "";
+    }
+    .portrait::after {
+      position: absolute;
+      z-index: -1;
+      bottom: -5%;
+      left: 14%;
+      width: 72%;
+      height: 59%;
+      border: 1px solid hsla(var(--portrait-hue), 64%, 65%, .52);
+      border-radius: 52% 52% 0 0;
+      background: linear-gradient(110deg, hsla(var(--portrait-hue), 42%, 41%, .72), #09110c 78%);
+      clip-path: polygon(29% 0, 71% 0, 100% 100%, 0 100%);
+      content: "";
+    }
+    .portrait-initials {
+      position: absolute;
+      z-index: 1;
+      right: 7px;
+      bottom: 4px;
+      color: hsla(var(--portrait-hue), 76%, 83%, .8);
+      font: 9px var(--mono);
+      letter-spacing: .08em;
+    }
+    .portrait-image {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .operative-portrait { width: 40px; height: 54px; }
+    .operative-copy { min-width: 0; }
+    .operative-name { display: block; overflow: hidden; font: 600 15px/1.3 var(--serif); text-overflow: ellipsis; white-space: nowrap; }
+    .operative-role { display: block; margin-top: 3px; color: var(--muted); font: 8px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .select-arrow { margin-left: auto; color: #536959; font-size: 15px; }
+    .operative[aria-pressed="true"] .select-arrow { color: var(--green); }
+    .empty-state {
+      display: none;
+      grid-column: 1/-1;
+      padding: 26px 15px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+    .empty-state.visible { display: block; }
+
+    .dossier {
+      min-height: 100%;
+      padding: clamp(20px, 3vw, 30px);
+      border: 1px solid rgba(99,219,134,.24);
+      background:
+        radial-gradient(ellipse at 100% 0%, rgba(34,107,55,.16), transparent 42%),
+        var(--panel);
+      box-shadow: inset 0 1px rgba(255,255,255,.025);
+    }
+    .dossier-top { display: flex; align-items: start; justify-content: space-between; gap: 15px; }
+    .file-label { color: var(--green); font: 9px var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .status { padding: 5px 8px; border: 1px solid rgba(99,219,134,.3); color: var(--green); font: 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; white-space: nowrap; }
+    .dossier-profile { display: flex; align-items: center; gap: 20px; margin: 18px 0 0; }
+    .dossier-portrait { width: clamp(160px, 20vw, 200px); height: clamp(200px, 25vw, 250px); }
+    .dossier-profile-copy { min-width: 0; }
+    .dossier h3 { margin: 0 0 4px; font: 600 clamp(28px, 4vw, 38px)/1.1 var(--serif); }
+    .dossier-role { color: var(--muted); font: 9px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .stand-line { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; margin-top: 13px; }
+    .stand-line span:first-child { color: #738378; font: 8px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    .stand-line strong { color: var(--lime); font: 500 15px var(--serif); }
+    .dossier-bio { min-height: 57px; margin: 13px 0 18px; color: #adbbb0; font-size: 12px; }
+    .record-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 18px; }
+    .record-item { min-width: 0; padding: 10px; border: 1px solid var(--line); background: rgba(0,0,0,.16); }
+    .record-item dt { color: #738378; font: 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .record-item dd { margin: 4px 0 0; color: #c5d1c7; font-size: 10px; overflow-wrap: anywhere; }
+    .ability { margin: 0 0 18px; padding: 12px 14px; border-left: 2px solid var(--green-dim); background: rgba(99,219,134,.04); color: #adbbb0; font-size: 11px; }
+    .ability strong { color: var(--lime); font-weight: 500; }
+    .details-label { padding-top: 15px; border-top: 1px solid var(--line); color: var(--green); font: 9px var(--mono); letter-spacing: .13em; text-transform: uppercase; }
+    .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 11px; }
+    .price {
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,.19);
+    }
+    .price span { display: block; color: var(--muted); font: 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+    .price strong { display: block; margin-top: 4px; color: var(--ink); font: 600 17px var(--serif); }
+    .price small { color: #708174; font: 8px var(--mono); }
+    .guarantees { display: grid; gap: 7px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .guarantees li { display: flex; gap: 9px; color: #b5c3b8; font-size: 10px; }
+    .guarantees li::before { color: var(--green); content: "✓"; font-family: var(--mono); }
+    .limits { margin: 14px 0 0; color: #7e8d81; font-size: 9px; line-height: 1.55; }
+    .limits strong { color: #aabaad; font-weight: 500; }
+    .hire-action {
+      display: flex;
+      min-height: 45px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 11px 15px;
+      border: 1px solid var(--green-dim);
+      background: rgba(99,219,134,.1);
+      color: var(--lime);
+      font: 10px var(--mono);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: background .2s ease, border-color .2s ease;
+    }
+    .hire-action:hover { border-color: var(--green); background: rgba(99,219,134,.17); }
+    .hire-action[aria-disabled="true"] { display: none; }
+    .hire-note { margin: 7px 0 0; color: #718174; font: 8px/1.5 var(--mono); }
+
+    .stand-section { padding-block: 58px 65px; border-top: 1px solid var(--line); background: rgba(11,21,15,.8); }
+    .stand-layout { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; }
+    .stand-copy { color: #afbeb2; font-size: 13px; }
+    .stand-copy p { margin: 0 0 13px; }
+    .stand-quote { margin-top: 20px; color: var(--lime); font: italic 18px/1.4 var(--serif); }
+    .footer { display: flex; align-items: center; justify-content: space-between; gap: 22px; padding-block: 24px; }
+    .footer p { margin: 0; color: #637267; font: 8px/1.6 var(--mono); }
+    .footer a { color: var(--green); font: 9px var(--mono); white-space: nowrap; }
+    html[data-access="customer"] .portrait-image { filter: blur(7px); transform: scale(1.12); }
+
+    @media (max-width: 800px) {
+      .edition-label { display: none; }
+      .overview, .stand-layout { grid-template-columns: 1fr; gap: 24px; }
+      .overview { padding-block: 58px; }
+      .stand-layout { gap: 19px; }
+      .board { grid-template-columns: 1fr; }
+      .roster { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .dossier-bio { min-height: 0; }
+    }
+    @media (max-width: 540px) {
+      .wrap { width: min(100% - 32px, 1160px); }
+      .topbar { height: 64px; }
+      .brand-mark { width: 36px; height: 36px; }
+      .brand-copy { font-size: 9px; }
+      .nav { gap: 8px; }
+      .nav a { font-size: 7px; letter-spacing: 0; }
+      .logout-link { padding: 7px 8px; font-size: 8px !important; }
+      .hero { min-height: 405px; }
+      .hero-content { padding-block: 63px; }
+      h1 { font-size: clamp(53px, 16vw, 76px); }
+      .hero-copy { max-width: 340px; font-size: 13px; }
+      .hero::before { right: -17%; opacity: .5; }
+      .hero-meta { gap: 10px; flex-wrap: wrap; }
+      .hero-meta span { font-size: 8px; }
+      .clearance { font-size: 7px; }
+      .contract-head { align-items: stretch; flex-direction: column; gap: 16px; }
+      .search { width: 100%; }
+      .roster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .operative { min-height: 75px; gap: 8px; padding: 9px; }
+      .operative-portrait { width: 33px; height: 45px; }
+      .operative-name { font-size: 12px; }
+      .operative-role { font-size: 7px; }
+      .select-arrow { display: none; }
+      .dossier-profile { align-items: flex-start; flex-direction: column; gap: 16px; }
+      .dossier-portrait { width: min(100%, 210px); height: 265px; }
+      .price-grid { gap: 6px; }
+      .price { padding: 9px; }
+      .price strong { font-size: 15px; }
+      .footer { align-items: start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+  <script src="auth.js"></script>
+</head>
+<body>
+  <header class="topbar wrap">
+    <a class="brand" href="#top" aria-label="Passione archive home">
+      <img class="brand-mark" src="assets/passione-emblem.png" alt="">
+      <span class="brand-copy">Passione archives<span>Internal contract registry</span></span>
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#overview">The archive</a>
+      <a href="#contracts">Operatives</a>
+      <a href="#stand-notes">Stand index</a>
+    </nav>
+    <span class="edition"><span class="edition-label">Venezia · restricted</span><a class="logout-link" href="login.html" data-sign-out>Logout</a></span>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="wrap hero-content">
+        <div class="eyebrow">Passione · internal personnel registry</div>
+        <h1>La <span>Squadra.</span></h1>
+        <p class="hero-copy">Operative profiles, Stand capabilities, and contract estimates for Passione's independent execution team.</p>
+        <div class="hero-meta" aria-label="Series information">
+          <span><strong>JoJo's Bizarre Adventure</strong></span><i class="dot" aria-hidden="true"></i>
+          <span>Part 5 · Golden Wind</span><i class="dot" aria-hidden="true"></i>
+          <span>Italy</span>
+        </div>
+      </div>
+      <span class="clearance mono">FILE 05 / INTERNAL USE ONLY</span>
+    </section>
+
+    <section class="overview wrap" id="overview">
+      <div>
+        <div class="section-label">01 / The organization</div>
+        <h2>Useful to Passione.<br>Never quite insiders.</h2>
+      </div>
+      <div class="overview-copy">
+        <p><strong>La Squadra Esecuzioni</strong> is Passione's hitman team. Their assignments put them among the organization's most capable Stand users, while their compensation and rank leave them dissatisfied.</p>
+        <p>The team turns against Passione's leadership after their demands for a greater share go unanswered. The records below summarize their known history, affiliations, Stand abilities, and contract terms.</p>
+        <div class="note"><strong>Archive note:</strong> “La Squadra” means “the team.” Personnel details reflect information available in the record.</div>
+      </div>
+    </section>
+
+    <section class="contracts wrap" id="contracts">
+      <div class="contract-head">
+        <div>
+          <div class="section-label">02 / Contract desk</div>
+          <h2>Choose an operative</h2>
+          <p class="subcopy">Select a personnel file to review the operative's record, Stand, rates, and terms.</p>
+        </div>
+        <label>
+          <span class="section-label" style="display:block;margin-bottom:7px">Search personnel</span>
+          <input class="search" id="search" type="search" placeholder="Name, Stand, or specialty..." autocomplete="off">
+        </label>
+      </div>
+      <div class="filters" role="group" aria-label="Filter operatives by specialty">
+        <button class="filter" type="button" aria-pressed="true" data-filter="all">All files</button>
+        <button class="filter" type="button" aria-pressed="false" data-filter="leader">Leadership</button>
+        <button class="filter" type="button" aria-pressed="false" data-filter="combat">Combat</button>
+        <button class="filter" type="button" aria-pressed="false" data-filter="infiltration">Infiltration</button>
+        <button class="filter" type="button" aria-pressed="false" data-filter="support">Support</button>
+      </div>
+      <p class="board-count" id="board-count" aria-live="polite"></p>
+      <div class="board">
+        <div class="roster" id="roster" role="group" aria-label="Select an operative">
+          <div class="empty-state" id="empty-state">No matching files. Try another name, Stand, or specialty.</div>
+        </div>
+        <article class="dossier" id="dossier" aria-live="polite" aria-label="Selected operative dossier">
+          <div class="dossier-top">
+            <span class="file-label" id="file-label">Personnel file 01 / 09</span>
+            <span class="status">Available for review</span>
+          </div>
+          <div class="dossier-profile">
+            <div class="portrait dossier-portrait" id="detail-portrait" role="img" aria-label="Portrait of Risotto Nero" style="--portrait-hue: 140">
+              <span class="portrait-initials" id="detail-initials">RN</span>
+            </div>
+            <div class="dossier-profile-copy">
+              <h3 id="detail-name">Risotto Nero</h3>
+              <div class="dossier-role" id="detail-role">Leader · Combat</div>
+              <div class="stand-line"><span>Stand</span><strong id="detail-stand">Metallica</strong></div>
+            </div>
+          </div>
+          <p class="dossier-bio" id="detail-bio"></p>
+          <dl class="record-grid" aria-label="Personnel record">
+            <div class="record-item"><dt>Affiliation</dt><dd id="detail-affiliation"></dd></div>
+            <div class="record-item"><dt>Personnel status</dt><dd id="detail-status"></dd></div>
+            <div class="record-item"><dt>Operational profile</dt><dd id="detail-profile"></dd></div>
+          </dl>
+          <p class="ability"><strong>Stand ability:</strong> <span id="detail-ability"></span></p>
+          <div class="details-label">Contract estimate</div>
+          <div class="price-grid">
+            <div class="price"><span>Engagement retainer</span><strong id="detail-retainer"></strong><small>One-time engagement</small></div>
+            <div class="price"><span>Mission rate</span><strong id="detail-rate"></strong><small>Per assignment</small></div>
+          </div>
+          <div class="details-label" style="margin-top:16px">Included contract terms</div>
+          <ul class="guarantees" id="detail-guarantees"></ul>
+          <p class="limits"><strong>Terms:</strong> Stand abilities have individual conditions and limitations. Rates are subject to the agreed assignment scope.</p>
+          <a class="hire-action" id="hire-action" href="mission.html?operative=risotto-nero">
+            <span>Prepare contract assessment</span><span aria-hidden="true">→</span>
+          </a>
+          <p class="hire-note">Contract assessment · assignment scope and estimated rate</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="stand-section" id="stand-notes">
+      <div class="wrap stand-layout">
+        <div>
+          <div class="section-label">03 / Stand index</div>
+          <h2>Nine members.<br>No two abilities alike.</h2>
+        </div>
+        <div class="stand-copy">
+          <p>A Stand is a manifestation of its user's fighting spirit. La Squadra's abilities range from reconnaissance and infiltration to direct combat and remote operation.</p>
+          <p>Each operative has a distinct specialization. Review the personnel file and Stand conditions before preparing an assignment assessment.</p>
+          <div class="stand-quote">“Know the user. Learn the Stand. Read the file.”</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer wrap">
+    <p>PASSIONE · VENEZIA PERSONNEL REGISTRY<br>INTERNAL CIRCULATION ONLY · FILES SUBJECT TO REVISION</p>
+    <a href="#top">Return to top ↑</a>
+  </footer>
+
+  <script>
+    const operatives = [
+      {
+        name: "Risotto Nero", slug: "risotto-nero", stand: "Metallica", initials: "RN", hue: 140, category: ["leader", "combat"],
+        // IMAGE URL — Risotto Nero: replace this local path to use a different portrait.
+        imageUrl: "assets/risotto-nero.jpg",
+        role: "Leader · Combat", specialty: "leadership, metal manipulation, close combat",
+        bio: "Leader of La Squadra Esecuzioni. After Sorbet and Gelato investigated Passione's boss, Risotto pursued the identity of the organization's leadership.",
+        affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Team leader",
+        ability: "Metallica manipulates iron particles and iron within a target's body. Its range and effectiveness depend on available iron and proximity.",
+        retainer: "18,000", rate: "42,000",
+        guarantees: ["A private point of contact for the engagement.", "Stand capabilities and known limitations reviewed before terms are set.", "One status update at the agreed checkpoint."]
+      },
+      {
+        name: "Formaggio", slug: "formaggio", stand: "Little Feet", initials: "FO", hue: 32, category: ["combat", "infiltration"],
+        // IMAGE URL — Formaggio: replace this local path to use a different portrait.
+        imageUrl: "assets/formaggio.png",
+        role: "Reconnaissance · Pursuit", specialty: "reconnaissance, pursuit, size reduction",
+        bio: "A quick-witted scout. Little Feet gradually shrinks its target, letting Formaggio turn an ordinary environment into an advantage.",
+        affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Reconnaissance specialist",
+        ability: "Little Feet gradually reduces the size of its target. The effect increases over time after contact.",
+        retainer: "8,000", rate: "19,000",
+        guarantees: ["A written scope and time window before engagement.", "A discreet status update at the agreed checkpoint.", "Retainer credited toward the mission rate."]
+      },
+      {
+        name: "Illuso", slug: "illuso", stand: "Man in the Mirror", initials: "IL", hue: 190, category: ["combat", "infiltration"],
+        // IMAGE URL — Illuso: replace this local path to use a different portrait.
+        imageUrl: "assets/illuso.png",
+        role: "Infiltration · Isolation", specialty: "infiltration, mirror world, isolation",
+        bio: "Confident and calculating. Man in the Mirror draws people and selected objects into a mirror world, separating targets from their allies.",
+        affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Infiltration specialist",
+        ability: "Man in the Mirror draws selected people and objects into a mirror dimension, with access governed by its user.",
+        retainer: "13,000", rate: "31,000",
+        guarantees: ["Entry conditions discussed before an assignment.", "One agreed status update during the engagement.", "A clear record of the contract scope."]
+      },
+      {
+        name: "Prosciutto", slug: "prosciutto", stand: "The Grateful Dead", initials: "PR", hue: 48, category: ["combat", "support"],
+        // IMAGE URL — Prosciutto: replace this local path to use a different portrait.
+        imageUrl: "assets/prosciutto.png",
+        role: "Combat · Field command", specialty: "field command, aging, area control",
+        bio: "A disciplined veteran who expects commitment from his partners. The Grateful Dead rapidly ages people, with effects shaped by body temperature.",
+        affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Field operative · senior member",
+        ability: "The Grateful Dead accelerates aging over a wide area. Its effects are influenced by body temperature.",
+        retainer: "16,000", rate: "38,000",
+        guarantees: ["A defined engagement window.", "Known Stand conditions explained before agreement.", "A single designated contact for status updates."]
+      },
+      {
+        name: "Pesci", slug: "pesci", stand: "Beach Boy", initials: "PE", hue: 170, category: ["combat", "support"],
+        // IMAGE URL — Pesci: replace this local path to use a different portrait.
+        imageUrl: "assets/pesci.png",
+        role: "Combat · Capture", specialty: "tracking, capture, fishing line",
+        bio: "Initially timid, Pesci becomes more decisive under pressure. Beach Boy's nearly invisible fishing line can hook and pursue a target through obstacles.",
+        affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Capture and pursuit",
+        ability: "Beach Boy uses a nearly invisible fishing line and hook that can pass through obstacles and track a target.",
+        retainer: "7,000", rate: "17,000",
+        guarantees: ["The assignment scope confirmed in writing.", "A checkpoint update when communication is available.", "No undisclosed add-on fees in the estimate."]
+      },
+      {
+        name: "Melone", slug: "melone", stand: "Baby Face", initials: "ME", hue: 285, category: ["support", "infiltration"],
+        // IMAGE URL — Melone: replace this local path to use a different portrait.
+        imageUrl: "assets/melone.jpg",
+        role: "Remote operations · Tracking", specialty: "remote operation, tracking, analysis",
+        bio: "An analytical specialist who deploys a remotely operating Stand. Baby Face can develop independently and pursue a target over distance.",
+        affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Remote-Stand specialist",
+        ability: "Baby Face is a remotely operating Stand that can develop independently and pursue targets at a distance.",
+        retainer: "14,000", rate: "34,000",
+        guarantees: ["The remote-operation scope reviewed before agreement.", "A contact for progress updates.", "Known operating limitations disclosed in advance."]
+      },
+      {
+        name: "Ghiaccio", slug: "ghiaccio", stand: "White Album", initials: "GH", hue: 205, category: ["combat"],
+        // IMAGE URL — Ghiaccio: replace this local path to use a different portrait.
+        imageUrl: "assets/ghiaccio.jpg",
+        role: "Combat · Area control", specialty: "ice, defense, area control",
+        bio: "Short-tempered but technically formidable. White Album creates and controls ice, surrounding Ghiaccio with a powerful defensive suit.",
+        affiliation: "La Squadra Esecuzioni", status: "Deceased", profile: "Combat · defensive specialist",
+        ability: "White Album creates and controls ice and forms a protective suit around its user.",
+        retainer: "15,000", rate: "36,000",
+        guarantees: ["The Stand's operating conditions discussed up front.", "A defined scope and estimated engagement window.", "A designated point of contact."]
+      },
+      {
+        name: "Sorbet", slug: "sorbet", stand: "｢Can't Tie Me Down｣", initials: "SO", hue: 90, category: ["support"],
+        // IMAGE URL — Sorbet: replace this local path to use a different portrait.
+        imageUrl: "assets/sorbet.png",
+        role: "Escape specialist · Support", specialty: "escape, restraint resistance, support",
+        bio: "An active member of La Squadra Esecuzioni. Sorbet and Gelato investigated Passione's boss and remain on the team's roster.",
+        affiliation: "La Squadra Esecuzioni", status: "Active · available", profile: "Escape and restraint specialist",
+        ability: "Can't Tie Me Down prevents Sorbet's body from being tied, bound, or restrained by ropes, restraints, or other means. He can slip free of bindings.",
+        retainer: "12,000", rate: "28,000",
+        guarantees: ["Assignment scope and duration confirmed before engagement.", "Stand capabilities reviewed during the briefing.", "Progress update at an agreed checkpoint."]
+      },
+      {
+        name: "Gelato", slug: "gelato", stand: "｢Baby Can't Cut｣", initials: "GE", hue: 320, category: ["support"],
+        // IMAGE URL — Gelato: replace this local path to use a different portrait.
+        imageUrl: "assets/gelato.png",
+        role: "Defensive specialist · Support", specialty: "defense, blade resistance, support",
+        bio: "An active member of La Squadra Esecuzioni. Gelato and Sorbet investigated Passione's boss and remain on the team's roster.",
+        affiliation: "La Squadra Esecuzioni", status: "Active · available", profile: "Defensive and close-protection specialist",
+        ability: "Baby Can't Cut makes Gelato's body impervious to sharp or pointed objects. He cannot be cut, sliced, or pierced through the skin.",
+        retainer: "13,000", rate: "30,000",
+        guarantees: ["Assignment scope and duration confirmed before engagement.", "Stand capabilities reviewed during the briefing.", "Progress update at an agreed checkpoint."]
+      }
+    ];
+
+    const roster = document.querySelector("#roster");
+    const searchInput = document.querySelector("#search");
+    const filterButtons = [...document.querySelectorAll(".filter")];
+    const boardCount = document.querySelector("#board-count");
+    const emptyState = document.querySelector("#empty-state");
+    const detailName = document.querySelector("#detail-name");
+    const detailRole = document.querySelector("#detail-role");
+    const detailStand = document.querySelector("#detail-stand");
+    const detailBio = document.querySelector("#detail-bio");
+    const detailRetainer = document.querySelector("#detail-retainer");
+    const detailRate = document.querySelector("#detail-rate");
+    const detailGuarantees = document.querySelector("#detail-guarantees");
+    const fileLabel = document.querySelector("#file-label");
+    const detailAffiliation = document.querySelector("#detail-affiliation");
+    const detailStatus = document.querySelector("#detail-status");
+    const detailProfile = document.querySelector("#detail-profile");
+    const detailAbility = document.querySelector("#detail-ability");
+    const detailPortrait = document.querySelector("#detail-portrait");
+    const detailInitials = document.querySelector("#detail-initials");
+    const hireAction = document.querySelector("#hire-action");
+    const dossier = document.querySelector("#dossier");
+    let activeFilter = "all";
+    let selectedName = operatives[0].name;
+    const operativeButtons = [];
+
+    function selectOperative(operative) {
+      selectedName = operative.name;
+      detailName.textContent = operative.name;
+      detailRole.textContent = operative.role;
+      detailStand.textContent = operative.stand;
+      detailBio.textContent = operative.bio;
+      detailAffiliation.textContent = operative.affiliation;
+      detailStatus.textContent = operative.status;
+      detailProfile.textContent = operative.profile;
+      detailAbility.textContent = operative.ability;
+      detailRetainer.textContent = operative.retainer === "Unavailable" ? operative.retainer : `L. ${operative.retainer}`;
+      detailRate.textContent = operative.rate === "Unavailable" ? operative.rate : `L. ${operative.rate}`;
+      fileLabel.textContent = `Personnel file ${String(operatives.indexOf(operative) + 1).padStart(2, "0")} / ${String(operatives.length).padStart(2, "0")}`;
+      detailPortrait.style.setProperty("--portrait-hue", operative.hue);
+      detailPortrait.setAttribute("aria-label", `Portrait of ${operative.name}`);
+      detailPortrait.querySelector(".portrait-image")?.remove();
+      if (operative.imageUrl) {
+        const portraitImage = document.createElement("img");
+        portraitImage.className = "portrait-image";
+        portraitImage.src = operative.imageUrl;
+        portraitImage.alt = `Portrait of ${operative.name}`;
+        detailPortrait.prepend(portraitImage);
+      }
+      detailInitials.textContent = operative.initials;
+      if (operative.retainer === "Unavailable") {
+        hireAction.setAttribute("aria-disabled", "true");
+        hireAction.removeAttribute("href");
+      } else {
+        hireAction.removeAttribute("aria-disabled");
+        hireAction.href = `mission.html?operative=${encodeURIComponent(operative.slug)}`;
+      }
+      detailGuarantees.replaceChildren();
+      for (const guarantee of operative.guarantees) {
+        const item = document.createElement("li");
+        item.textContent = guarantee;
+        detailGuarantees.append(item);
+      }
+      for (const button of operativeButtons) {
+        button.setAttribute("aria-pressed", String(button.dataset.name === operative.name));
+      }
+    }
+
+    for (const operative of operatives) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "operative";
+      button.dataset.name = operative.name;
+      button.dataset.category = operative.category.join(" ");
+      button.dataset.search = `${operative.name} ${operative.stand} ${operative.specialty}`.toLowerCase();
+      button.setAttribute("aria-pressed", "false");
+
+      const initials = document.createElement("span");
+      initials.className = "portrait operative-portrait";
+      initials.style.setProperty("--portrait-hue", operative.hue);
+      initials.setAttribute("role", "img");
+      initials.setAttribute("aria-label", `Portrait of ${operative.name}`);
+      initials.textContent = operative.initials;
+      if (operative.imageUrl) {
+        const portraitImage = document.createElement("img");
+        portraitImage.className = "portrait-image";
+        portraitImage.src = operative.imageUrl;
+        portraitImage.alt = "";
+        initials.append(portraitImage);
+      }
+      const copy = document.createElement("span");
+      copy.className = "operative-copy";
+      const name = document.createElement("span");
+      name.className = "operative-name";
+      name.textContent = operative.name;
+      const role = document.createElement("span");
+      role.className = "operative-role";
+      role.textContent = operative.role;
+      copy.append(name, role);
+      const arrow = document.createElement("span");
+      arrow.className = "select-arrow";
+      arrow.setAttribute("aria-hidden", "true");
+      arrow.textContent = "→";
+      button.append(initials, copy, arrow);
+      button.addEventListener("click", () => selectOperative(operative));
+      roster.insertBefore(button, emptyState);
+      operativeButtons.push(button);
+    }
+
+    function updateRoster() {
+      const query = searchInput.value.trim().toLowerCase();
+      let visible = 0;
+      let selectedVisible = false;
+      for (const button of operativeButtons) {
+        const matchesText = button.dataset.search.includes(query);
+        const matchesFilter = activeFilter === "all" || button.dataset.category.split(" ").includes(activeFilter);
+        const show = matchesText && matchesFilter;
+        button.hidden = !show;
+        if (show) {
+          visible += 1;
+          if (button.dataset.name === selectedName) selectedVisible = true;
+        }
+      }
+      boardCount.textContent = `${visible} ${visible === 1 ? "personnel file" : "personnel files"} found`;
+      emptyState.classList.toggle("visible", visible === 0);
+      dossier.hidden = visible === 0;
+      if (visible > 0 && !selectedVisible) {
+        const firstVisible = operatives.find(operative => {
+          const button = operativeButtons.find(item => item.dataset.name === operative.name);
+          return !button.hidden;
+        });
+        selectOperative(firstVisible);
+      }
+    }
+
+    searchInput.addEventListener("input", updateRoster);
+    for (const filterButton of filterButtons) {
+      filterButton.addEventListener("click", () => {
+        activeFilter = filterButton.dataset.filter;
+        for (const button of filterButtons) {
+          button.setAttribute("aria-pressed", String(button === filterButton));
+        }
+        updateRoster();
+      });
+    }
+    selectOperative(operatives[0]);
+    updateRoster();
+  </script>
+</body>
+</html>
